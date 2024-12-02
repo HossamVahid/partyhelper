@@ -6,6 +6,7 @@ using party_helperbe.Common.Models;
 using party_helperbe.Common.RequestModels;
 using party_helperbe.DataAccess.Models;
 using System.Net.WebSockets;
+using System.Security.Claims;
 
 namespace party_helperbe.Controllers
 {
@@ -23,7 +24,7 @@ namespace party_helperbe.Controllers
 
 
         [HttpPost("create")]
-        [Authorize(Roles ="Admin,User")]
+        [Authorize(Roles ="User")]
 
         public async Task<IActionResult> CreateParty([FromBody]PartyRequest partyRequest)
         {
@@ -83,7 +84,7 @@ namespace party_helperbe.Controllers
         }
 
         [HttpGet("show/{page}")]
-     
+
 
         public async Task<IActionResult> ShowPartys(int page = 1)
         {
@@ -100,6 +101,36 @@ namespace party_helperbe.Controllers
             }).ToList();
 
             return Ok(new {Page=page, TotalPages=totalPages,Partys=partysOnPage});
+        }
+
+        [HttpDelete("delete/{partyId}")]
+        [Authorize(Roles = "Admin,User")]
+
+        public async Task<IActionResult> DeleteParty(int partyId)
+        {
+            var party= await _appData.Partys.FirstOrDefaultAsync(p=>p.partyId==partyId);
+            if (party==null)
+            {
+                return BadRequest(new { error = "Party does not exist" });
+            }
+
+            var claimId = this.User.Claims.FirstOrDefault(x => x.Type == "memberId");
+            int memberId = int.Parse(claimId.Value);
+
+            if(memberId != party.creatorId) 
+            {
+                return BadRequest(new { error = "You dont have acces to delete this party" });
+            }
+
+            var participants= await _appData.Participants.Where(p=>p.partyId == partyId).ToListAsync();
+
+            _appData.Participants.RemoveRange(participants);
+             _appData.Partys.Remove(party);
+
+            await _appData.SaveChangesAsync();
+
+            return Ok();
+
         }
 
 
