@@ -1,0 +1,6 @@
+@party_helperbe_HostAddress = http://localhost:5200
+
+GET {{party_helperbe_HostAddress}}/partyhelper/
+Accept: application/json
+
+###
