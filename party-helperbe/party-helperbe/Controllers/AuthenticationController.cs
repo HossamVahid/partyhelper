@@ -91,7 +91,7 @@ namespace party_helperbe.Controllers
         }
 
         [HttpGet("role")]
-        [Authorize(Roles ="ADMIN,User")]
+        [Authorize(Roles ="Admin,User")]
         public IActionResult GetRole()
         {
             var role = User.FindFirst(ClaimTypes.Role).Value;

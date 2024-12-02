@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using party_helperbe;
@@ -11,9 +12,11 @@ using party_helperbe;
 namespace party_helperbe.Migrations
 {
     [DbContext(typeof(PgSQLDbContext))]
-    partial class PgSQLDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241202185841_PartyHelper")]
+    partial class PartyHelper
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

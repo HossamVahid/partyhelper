@@ -8,6 +8,8 @@ namespace party_helperbe
     public class PgSQLDbContext: DbContext
     {
         public DbSet<Member> Members { get; set; }
+        public DbSet<Party> Partys { get; set; }
+        public DbSet<Participant> Participants { get; set; }
 
 
         public PgSQLDbContext()
