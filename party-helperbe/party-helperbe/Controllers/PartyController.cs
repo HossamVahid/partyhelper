@@ -56,8 +56,30 @@ namespace party_helperbe.Controllers
             return Ok(party);
         }
 
-      /*  [HttpPost("join")]
-        [Authorize(Roles="User")]*/
+        [HttpPost("join/{partyId}")]
+        [Authorize(Roles="User")]
+
+        public async Task<IActionResult> JoinParty(int partyId)
+        {
+            var claimId = this.User.Claims.FirstOrDefault(x => x.Type == "memberId");
+
+            int memberId = int.Parse(claimId.Value);
+
+            var memberName = await _appData.Members.Where(m => m.memberId == memberId).Select(m => m.userName).FirstOrDefaultAsync();
+
+            var participant = new Participant
+            { 
+               partyId= partyId,
+               memberId=memberId,
+               participantName=memberName,
+            };
+
+            await _appData.Participants.AddAsync(participant);
+            await _appData.SaveChangesAsync();
+
+            return Ok(participant);
+
+        }
 
 
     }
