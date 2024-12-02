@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using party_helperbe.Common.Models;
 using party_helperbe.Common.RequestModels;
 using party_helperbe.DataAccess.Models;
 using System.Net.WebSockets;
@@ -79,6 +80,26 @@ namespace party_helperbe.Controllers
 
             return Ok(participant);
 
+        }
+
+        [HttpGet("show/{page}")]
+     
+
+        public async Task<IActionResult> ShowPartys(int page = 1)
+        {
+            List<Party> partys = await _appData.Partys.ToListAsync();
+
+            var totalPartys = partys.Count();
+
+            var totalPages = (int)Math.Ceiling((decimal)totalPartys / 5);
+
+            var partysOnPage = partys.Skip((page - 1) * 5).Take(5).Select(p => new PartyInfo
+            {
+                partyId = p.partyId,
+                partyName = p.partyName
+            }).ToList();
+
+            return Ok(new {Page=page, TotalPages=totalPages,Partys=partysOnPage});
         }
 
 
