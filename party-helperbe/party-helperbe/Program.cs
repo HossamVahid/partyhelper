@@ -14,14 +14,18 @@ builder.Services.AddConfig();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var dbContextPgSQL = services.GetRequiredService<PgSQLDbContext>();
+    dbContextPgSQL.Database.Migrate();
+}
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
