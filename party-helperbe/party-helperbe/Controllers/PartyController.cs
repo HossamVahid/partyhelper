@@ -69,7 +69,7 @@ namespace party_helperbe.Controllers
 
             var memberName = await _appData.Members.Where(m => m.memberId == memberId).Select(m => m.userName).FirstOrDefaultAsync();
 
-            bool found = await _appData.Participants.AnyAsync(m=> m.memberId == memberId);
+            bool found = await _appData.Participants.AnyAsync(m=> m.memberId == memberId && m.partyId == partyId);
             if(found)
             {
                 return BadRequest(new { error = "Member is in this party" });
@@ -125,7 +125,7 @@ namespace party_helperbe.Controllers
 
             if(memberId != party.creatorId) 
             {
-                return BadRequest(new { error = "You dont have acces to delete this party" });
+                return Unauthorized(new { error = "You dont have acces to delete this party" });
             }
 
             var participants= await _appData.Participants.Where(p=>p.partyId == partyId).ToListAsync();
