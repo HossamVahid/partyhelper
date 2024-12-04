@@ -37,7 +37,27 @@ namespace party_helperbe.Controllers
             }).ToList();
 
             return Ok(new {Page  = page, TotalPages=totalPages, Members =  membersOnPage});
-        } 
+        }
+
+        [HttpDelete("member/delete/{memberId}")]
+        [Authorize(Roles ="Admin")]
+        public async Task<IActionResult> DeleteMember(int memberId)
+        {
+            var member = await _appData.Members.FirstOrDefaultAsync(m=> m.memberId == memberId);
+            var partys = await _appData.Partys.Where(p => p.creatorId == memberId).ToListAsync();
+            var partyIds = partys.Select(p => p.partyId).ToList();
+
+            var participants = await _appData.Participants
+                .Where(p => partyIds.Contains(p.partyId.GetValueOrDefault()))
+                .ToListAsync();
+
+            _appData.Partys.RemoveRange(partys);
+            _appData.Participants.RemoveRange(participants);
+            _appData.Members.Remove(member);
+            _appData.SaveChangesAsync();
+
+            return Ok("Member was deleted");
+        }
 
 
     }
