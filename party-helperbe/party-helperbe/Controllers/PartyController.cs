@@ -103,7 +103,8 @@ namespace party_helperbe.Controllers
             var partysOnPage = partys.Skip((page - 1) * 5).Take(5).Select(p => new PartyInfo
             {
                 partyId = p.partyId,
-                partyName = p.partyName
+                partyName = p.partyName,
+                partyDate = p.partyDate.GetValueOrDefault()
             }).ToList();
 
             return Ok(new {Page=page, TotalPages=totalPages,Partys=partysOnPage});
