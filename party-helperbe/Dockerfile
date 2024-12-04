@@ -29,3 +29,4 @@ COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "party-helperbe.dll"]
 
 
+
