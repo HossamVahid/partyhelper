@@ -23,7 +23,7 @@ namespace party_helperbe.Controllers
 
 
 
-        [HttpPost("create")]
+        [HttpPost("party/create")]
         [Authorize(Roles ="User")]
 
         public async Task<IActionResult> CreateParty([FromBody]PartyRequest partyRequest)
@@ -58,7 +58,7 @@ namespace party_helperbe.Controllers
             return Ok(party);
         }
 
-        [HttpPost("join/{partyId}")]
+        [HttpPost("party/join/{partyId}")]
         [Authorize(Roles="User")]
 
         public async Task<IActionResult> JoinParty(int partyId)
@@ -68,6 +68,12 @@ namespace party_helperbe.Controllers
             int memberId = int.Parse(claimId.Value);
 
             var memberName = await _appData.Members.Where(m => m.memberId == memberId).Select(m => m.userName).FirstOrDefaultAsync();
+
+            bool found = await _appData.Participants.AnyAsync(m=> m.memberId == memberId);
+            if(found)
+            {
+                return BadRequest(new { error = "Member is in this party" });
+            }
 
             var participant = new Participant
             { 
@@ -83,7 +89,7 @@ namespace party_helperbe.Controllers
 
         }
 
-        [HttpGet("show/{page}")]
+        [HttpGet("party/show/{page}")]
 
 
         public async Task<IActionResult> ShowPartys(int page = 1)
@@ -103,7 +109,7 @@ namespace party_helperbe.Controllers
             return Ok(new {Page=page, TotalPages=totalPages,Partys=partysOnPage});
         }
 
-        [HttpDelete("delete/{partyId}")]
+        [HttpDelete("party/delete/{partyId}")]
         [Authorize(Roles = "Admin,User")]
 
         public async Task<IActionResult> DeleteParty(int partyId)
@@ -129,7 +135,7 @@ namespace party_helperbe.Controllers
 
             await _appData.SaveChangesAsync();
 
-            return Ok();
+            return Ok("Party was succesfuly deleted");
 
         }
 
