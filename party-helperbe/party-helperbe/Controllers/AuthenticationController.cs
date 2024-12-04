@@ -63,6 +63,28 @@ namespace party_helperbe.Controllers
         public async Task<IActionResult> Login([FromBody] LoginModel request)
         {
 
+            if (string.IsNullOrEmpty(request.emailAdress)||string.IsNullOrEmpty(request.Password))
+            {
+                return BadRequest(new { error = "Empty request" });
+            }
+
+            if(request.emailAdress == Environment.GetEnvironmentVariable("ADMIN_EMAIL"))
+            {
+                if(request.Password != Environment.GetEnvironmentVariable("ADMIN_PASSWORD"))
+                {
+                    return Unauthorized(new { error = "Password for admin is not correct" });
+                }
+
+                var adminClaims = new[]
+                {
+                    new Claim(ClaimTypes.Role, "Admin"),
+                    new Claim("memberId", "0")
+                };
+
+                var adminToken=TokenHelper.GenerateJwtToken(adminClaims);
+                return Ok(new {Token=adminToken});
+            }
+
 
             var user = await _appData.Members.FirstOrDefaultAsync(m => m.emailAddress == request.emailAdress);
 
@@ -79,7 +101,7 @@ namespace party_helperbe.Controllers
             }
 
             var claims = new[]
-         {
+            {
                 new Claim(ClaimTypes.Role, "User"),
                 new Claim("memberId",user.memberId.ToString())
             };

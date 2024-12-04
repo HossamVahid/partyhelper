@@ -61,7 +61,7 @@ namespace party_helperbe.Controllers
             var claimId = this.User.Claims.FirstOrDefault(x => x.Type == "memberId");
             int memberId = int.Parse(claimId.Value);
 
-            if (memberId != party.creatorId && memberId != particiapnt.memberId)
+            if (memberId != party.creatorId && memberId != particiapnt.memberId && memberId != 0)
             {
                 return Unauthorized(new { error = "You do not have permision to remove" });
             }

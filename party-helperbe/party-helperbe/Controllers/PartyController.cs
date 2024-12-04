@@ -24,7 +24,7 @@ namespace party_helperbe.Controllers
 
 
         [HttpPost("party/create")]
-        [Authorize(Roles ="User")]
+        [Authorize(Roles ="User,Admin")]
 
         public async Task<IActionResult> CreateParty([FromBody]PartyRequest partyRequest)
         {
@@ -124,7 +124,7 @@ namespace party_helperbe.Controllers
             var claimId = this.User.Claims.FirstOrDefault(x => x.Type == "memberId");
             int memberId = int.Parse(claimId.Value);
 
-            if(memberId != party.creatorId) 
+            if(memberId != party.creatorId && memberId != 0) 
             {
                 return Unauthorized(new { error = "You dont have acces to delete this party" });
             }
