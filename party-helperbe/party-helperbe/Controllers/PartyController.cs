@@ -139,6 +139,30 @@ namespace party_helperbe.Controllers
 
         }
 
+        [HttpDelete("party/delete")]
+
+        public async Task<IActionResult> Delete()
+        {
+            var partys = await _appData.Partys.Where(p=>p.partyDate < DateTime.UtcNow).ToListAsync();
+
+            if(partys == null)
+            {
+                return Ok("No party was deleted");
+            }
+
+            var partyIds = partys.Select(p => p.partyId).ToList();
+
+           
+            var participants = await _appData.Participants
+                .Where(p => partyIds.Contains(p.partyId.GetValueOrDefault())) 
+                .ToListAsync();
+
+            _appData.Partys.RemoveRange(partys);
+            _appData.Participants.RemoveRange(participants);
+            await _appData.SaveChangesAsync();
+            return Ok();
+        }
+
 
     }
 }
