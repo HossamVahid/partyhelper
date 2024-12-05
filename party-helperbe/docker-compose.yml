@@ -7,6 +7,8 @@ services:
       - DATABASE=Host=db;Port=5432;Username=postgres;Password=1234;Database=app_db
       - ASPNETCORE_HTTP_PORTS=8080
       - KEY=Zm9vYmFyYmF6b29saW5rZXkgbG9uZyBmb3IgdGVzdGluZw==
+      - ADMIN_EMAIL=admin@admin.com
+      - ADMIN_PASSWORD=admin
       - ISSUER=localhost
       - AUDIENCE=localhost
     depends_on:
