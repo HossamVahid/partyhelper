@@ -11,7 +11,7 @@
 ## Available APIs
 After the installation is complete, you can open the container, use an API testing tool, and access the following API URLs.
 
- - `http://localhost:3278/api/v1/register` // **POST** method 
+ - `http://localhost:3278/api/v1/register` - **POST** method 
  - `http://localhost:3278/api/v1/login` - **POST** method (For logging in with the admin account(use credentials: `admin@admin.com` and `admin`)
  - `http://localhost:3278/api/v1/role` - **GET** method for retrieving the role of a member (requires a valid token).
  - `http://localhost:3278/api/v1/party/create` - **POST** method for creating an party  (requires a valid token).
