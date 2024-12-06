@@ -9,7 +9,7 @@
  3. After installing the Docker image, download the `docker-compose` file, open a terminal in the directory where the file is located, and run `docker-compose up`. Once this is done, the installation process will be complete. ![docker compose image](https://github.com/user-attachments/assets/926aa9b4-3681-4f05-a58a-68b921dbaff8)
 
 ## Available APIs
-After the installation is complete, you can open the container and use the following API URLs
+After the installation is complete, you can open the container, use an API testing tool, and access the following API URLs.
 
  - `http://localhost:3278/api/v1/register` // **POST** method 
  - `http://localhost:3278/api/v1/login` - **POST** method (For logging in with the admin account(use credentials: `admin@admin.com` and `admin`)
