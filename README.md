@@ -5,6 +5,7 @@
  1. **Authentication**: JWT (JSON Web Token) is used for securely transferring data between the client and server.
  2.**Models**: Separate models have been created for Members, Party, and Participants.
  3. **CI/CD**: GitHub Actions is used for Continuous Integration and Continuous Deployment.
+**The application was developed using Visual Studio 2022.**
 
 ## How to install Party Helper
 
